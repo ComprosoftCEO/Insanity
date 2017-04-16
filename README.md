@@ -110,8 +110,7 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 | Command | Description |
 | ------- | ----------- |
 | ? | Ask the user to input a number (-999 to 999). Store this number in the Accumulator |
-| # | Output the value of the Accumulator as a text character
-(See Character Conversion Chart) |
+| # | Output the value of the Accumulator as a text character (See Character Conversion Chart) |
 <br />
 
 #### Other
