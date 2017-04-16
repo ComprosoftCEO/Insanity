@@ -3,9 +3,9 @@
 #include <string.h>
 #include <ctype.h> 
 #include <unistd.h>
-#include <termios.h>
+#include <conio.h>
 #include <time.h>
-
+#include <windows.h>
 
 //          $$$$$$$$$$$$$$$
 //          $ Definitions $
@@ -20,23 +20,21 @@ typedef unsigned int uint;
 #define true 1
 
 //Pretty colors
-#define RESET   "\033[0m"
-#define BLACK   "\033[30m"      /* Black */
-#define RED     "\033[31m"      /* Red */
-#define GREEN   "\033[32m"      /* Green */
-#define YELLOW  "\033[33m"      /* Yellow */
-#define BLUE    "\033[34m"      /* Blue */
-#define MAGENTA "\033[35m"      /* Magenta */
-#define CYAN    "\033[36m"      /* Cyan */
-#define WHITE   "\033[37m"      /* White */
-#define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
-#define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
-#define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
-#define BOLDYELLOW  "\033[1m\033[33m"      /* Bold Yellow */
-#define BOLDBLUE    "\033[1m\033[34m"      /* Bold Blue */
-#define BOLDMAGENTA "\033[1m\033[35m"      /* Bold Magenta */
-#define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
-#define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
+#define RESET       SetConsoleTextAttribute(hConsole, saved_attributes);
+#define RED         SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+#define GREEN       SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+#define YELLOW      SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN);
+#define BLUE        SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE);
+#define MAGENTA     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE);
+#define CYAN        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_BLUE);
+#define WHITE       SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+#define BOLDRED     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+#define BOLDGREEN   SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+#define BOLDYELLOW  SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+#define BOLDBLUE    SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+#define BOLDMAGENTA SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+#define BOLDCYAN    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+#define BOLDWHITE   SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 
 
 //          $$$$$$$$$$$$$$$$
@@ -125,10 +123,12 @@ typedef struct {
 
 REG sys;	// Bitfield used to save space and be AWESOME!!!
 
-uint32 curByte, maxByte;	//Used when parsing file
-uint lblCount, resolveCount;	//Used to keep track of labels
+uint32 curByte, maxByte;				//Used when parsing file
+uint lblCount, resolveCount;			//Used to keep track of labels
 
-
+HANDLE hConsole;							//What is the console?
+CONSOLE_SCREEN_BUFFER_INFO infoCon;		//Console info (for reset)
+WORD saved_attributes;					//The color data, I guess...
 
 
 //          $$$$$$$$$$$$$$$$$$$$$$$
@@ -186,15 +186,22 @@ short int parseNumber(char*);
 
 int main(int argc, char* argv[]) {
 
-
- printf(BOLDMAGENTA " ___                       _ _\n");
+ //Get the console info
+ hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+ GetConsoleScreenBufferInfo(hConsole, &infoCon);
+ saved_attributes = infoCon.wAttributes;
+ 
+ BOLDMAGENTA
+ printf(" ___                       _ _\n");
  printf("|_ _|_ __  ___  __ _ _ __ (_) |_ _   _\n");
  printf(" | || '_ \\/ __|/ _` | '_ \\| | __| | | |\n");
  printf(" | || | | \\__ \\ (_| | | | | | |_| |_| |\n");
  printf("|___|_| |_|___/\\__,_|_| |_|_|\\__|\\__, |\n");
- printf("       Programming Language      |___/\n"RESET);
- printf(YELLOW "\n     Created by Bryan McClain\n");
- printf(GREEN "       (C) Comprosoft 2017\n\n");
+ printf("       Programming Language      |___/\n");
+ BOLDYELLOW
+ printf("\n     Created by Bryan McClain\n");
+ BOLDGREEN
+ printf("       (C) Comprosoft 2017\n\n");
 
   //Read all files
   for (int i = 1; i < argc; i++) {
@@ -202,7 +209,8 @@ int main(int argc, char* argv[]) {
 	//Make sure file is lefit
 	if( access(argv[i], F_OK ) != -1 ) {
    	  
-  	  printf(WHITE "\nProgram: %s\n\n", argv[i]);
+	  WHITE
+  	  printf("\nProgram: %s\n\n", argv[i]);
 
 	  //Open the file
 	  FILE *fp = fopen(argv[i], "rb");
@@ -219,12 +227,15 @@ int main(int argc, char* argv[]) {
 	  fclose(fp);
 
 	} else {
-    	  printf(BOLDCYAN "Error!"RESET" Invalid file %s\n\n", argv[i]);
+		  BOLDCYAN
+    	  printf("Error!");
+		  WHITE
+		  printf(" Invalid file %s\n\n", argv[i]);
 	}
 
   }
 
-  printf(RESET);
+  RESET
 
   return 0;
 
@@ -272,26 +283,36 @@ void reset() {
 void drawDebug(label* allLabels, byte* program) {
 
   //Display labels found
-  printf(YELLOW"Labels Found: %d\n",lblCount);
+  BOLDYELLOW
+  printf("Labels Found: %d\n",lblCount);
   for (int i = 0; i < lblCount; i++) {
-	printf(BLUE"  \"%s\" "RESET,allLabels[i].name);
-  	if (allLabels[i].used == false) {printf(BOLDMAGENTA"\t(Unused)");}
-	printf(RESET"\n");
+	BOLDCYAN
+	printf("  \"%s\" ",allLabels[i].name);
+	WHITE
+  	if (allLabels[i].used == false) {
+		BOLDMAGENTA
+		printf("\t(Unused)");
+	}
+	WHITE
+	printf("\n");
   }
 
   //Grammer OCD
+  BOLDRED
   if (curByte == 1) {
-      printf(BOLDCYAN"\nProgram: 1 Byte\n  "BOLDGREEN);
+	  printf("\nProgram: 1 Byte\n  ");
   } else {
-      printf(BOLDCYAN"\nProgram: %d Bytes\n  "BOLDGREEN,curByte);
+      printf("\nProgram: %d Bytes\n  ",curByte);
   }
-
+  BOLDGREEN
+ 
   for(int i = 0; i < curByte; i++) {
 	printf("%d",sys.program[i]);
   	if (i < curByte-1) {printf(",");}
   }
-  printf(BOLDWHITE"\n\n\n"RESET);
-
+  
+  printf("\n\n\n");
+  WHITE
 
 }
 
@@ -301,16 +322,11 @@ void drawDebug(label* allLabels, byte* program) {
 //#################################
 void pauseProgram() {
 
-  printf(BOLDWHITE"Press any key to continue..."RESET);
-
-  struct termios info;
-  tcgetattr(0, &info);          /* get current terminal attirbutes; 0 is the file descriptor for stdin */
-  info.c_lflag &= ~ICANON;      /* disable canonical mode */
-  info.c_cc[VMIN] = 1;          /* wait until at least one keystroke available */
-  info.c_cc[VTIME] = 0;         /* no timeout */
-  tcsetattr(0, TCSANOW, &info); /* set immediately */
-
-  getchar();
+  BOLDWHITE
+  printf("Press any key to continue...");
+  WHITE
+  
+  _getch();	
   printf("\n");
 }
 
@@ -323,26 +339,49 @@ void pauseProgram() {
 //#################################
 void debugPause() {
 
-  printf(BOLDWHITE"\nDebug Info:\n");
+  BOLDWHITE
+  printf("\nDebug Info:\n");
   printf("-----------\n\n");
-  printf(BOLDCYAN"Acc: "RESET"%d    \t|",sys.acc);
-  printf(BOLDYELLOW"   Bak: "RESET"%d\n",sys.bak);
-  printf(BOLDGREEN"PC: "RESET"%d    \t|", sys.pc);
-  printf(BOLDMAGENTA"   SP: "RESET"%d\n\n",sys.sp);
-  printf(BOLDBLUE"Memory: "RESET"%d\t|",sys.mc);
-  printf(BOLDBLUE"   Digit: "RESET"%d\n",getDigit());
-  printf(BOLDRED"Overflow: "RESET"%d\t|",sys.overflow);
-  printf(BOLDRED"   Compare: "RESET"%d\n",sys.compare);
+  BOLDCYAN
+  printf("Acc: ");
+  WHITE
+  printf("%d    \t|",sys.acc);
+  BOLDYELLOW
+  printf("   Bak: ");
+  WHITE
+  printf("%d\n",sys.bak);
+  
+  BOLDGREEN
+  printf("PC: ");
+  WHITE
+  printf("%d    \t|", sys.pc);
+  BOLDMAGENTA
+  printf("   SP: ");
+  WHITE
+  printf("%d\n\n",sys.sp);
+  
+  BOLDCYAN
+  printf("Memory: ");
+  WHITE
+  printf("%d\t|",sys.mc);
+  BOLDCYAN
+  printf("   Digit: ");
+  WHITE
+  printf("%d\n",getDigit());
+  
+  BOLDRED
+  printf("Overflow: ");
+  WHITE
+  printf("%d\t|",sys.overflow);
+  BOLDRED
+  printf("   Compare: ");
+  WHITE
+  printf("%d\n",sys.compare);
+  
+  BOLDWHITE
   printf("\nPress any key to continue...");
 
-  struct termios info;
-  tcgetattr(0, &info);          /* get current terminal attirbutes; 0 is the file descriptor for stdin */
-  info.c_lflag &= ~ICANON;      /* disable canonical mode */
-  info.c_cc[VMIN] = 1;          /* wait until at least one keystroke available */
-  info.c_cc[VTIME] = 0;         /* no timeout */
-  tcsetattr(0, TCSANOW, &info); /* set immediately */
-
-  getchar();
+  _getch();	
   printf("\n");
 }
 
@@ -433,7 +472,10 @@ byte parseFile(FILE *fp) {
 	  //Verify that this label doesn't already exist
 	  newName = readLabel(fp,':'); 
 	  if (duplicateLabel(newName, allLabels) == true) {
-		printf(BOLDCYAN "Error!"RESET" Duplicate label \"%s\"\n", newName);
+		BOLDCYAN
+		printf("Error!");
+		WHITE
+		printf(" Duplicate label \"%s\"\n", newName);
 		error = true;
 		break;
 	  }
@@ -490,7 +532,10 @@ byte parseFile(FILE *fp) {
 		lastIf = temp;
 		ifCount--;
 	  } else {
-		printf(BOLDCYAN "Erorr! "RESET"Missing starting bracket {.\n");
+		BOLDCYAN
+		printf("Erorr! ");
+		WHITE
+		printf("Missing starting bracket {.\n");
 		error = true;
  	  }
 	  break;
@@ -512,7 +557,10 @@ byte parseFile(FILE *fp) {
 
   //Test for missing if end
   if (ifCount > 0) {
-	printf(BOLDCYAN "Error! "RESET"Missing ending bracket }.\n");
+	BOLDCYAN
+	printf("Error! ");
+	WHITE
+	printf("Missing ending bracket }.\n");
 	error = true;
   }
   
@@ -525,7 +573,10 @@ byte parseFile(FILE *fp) {
 	uint32 addr = findLabel(toResolve[i].name, allLabels);
 
 	if (addr == -1) {
-		printf(BOLDCYAN "Error! "RESET"Undefined label \"%s\"\n",toResolve[i].name);
+		BOLDCYAN
+		printf("Error! ");
+		WHITE
+		printf("Undefined label \"%s\"\n",toResolve[i].name);
 		error = true;	
 	} else {
 	 	storeWord(&sys.program[toResolve[i].address],addr);
@@ -556,7 +607,11 @@ byte parseFile(FILE *fp) {
 //#    This is VERY BAD!!!
 //###############################
 void parseFail() {
-  printf(BOLDRED "\nUnable to compile program.\n"YELLOW"  *Don't go insane fixing your code :)\n\n" RESET);
+  BOLDRED
+  printf("\nUnable to compile program.\n");
+  BOLDYELLOW
+  printf("  *Don't go insane fixing your code :)\n\n");
+  WHITE
 }
 
 
@@ -615,10 +670,10 @@ byte charToCommand(char input) {
 char* readLabel(FILE* fp, char terminator) {
 
   //Create a buffer
-  char* buffer = calloc(0, sizeof(char));
+  char* buffer = calloc(10, sizeof(char));
   uint32 buf_pos = 0;		//Where to put the character in the buffer
   uint32 buf_length = 10;	//What is the size of the buffer
-
+  
   //Read until end of the file
   char c = fgetc(fp);
   while ((c != EOF) && (c != terminator)) {
@@ -636,8 +691,8 @@ char* readLabel(FILE* fp, char terminator) {
   }
   //Add the terminating character
   buffer[buf_pos++] = '\0';
-  buffer = realloc(buffer, sizeof(char) * buf_pos);  
-
+  buffer = realloc(buffer, strlen(buffer));  
+  
   return buffer;
 }
 
@@ -665,7 +720,6 @@ byte duplicateLabel(char* input, label* allLabels) {
 //#  letter or a number
 //################################
 byte validLblChar(char input) {
-
   if ((input >= 48 && input <= 57) ||
       (input >= 65 && input <= 90) ||
       (input >= 97 && input <= 122)) {
@@ -708,7 +762,7 @@ uint32 findLabel(char* input, label* allLabels) {
 void run() {
 
   //Clear the screen and reset program
-  system("clear");
+  system("cls");
   reset();
 
   byte c;	//Stores the command
@@ -720,7 +774,10 @@ void run() {
     //printf("%d\n",c);
     switch (c) {
 	case 0:		//Quit
-	  printf(BOLDRED"\n\nProgram stopped at "BOLDCYAN"%d.\n\n", sys.pc);
+	  BOLDRED
+	  printf("\n\nProgram stopped at ");
+	  BOLDCYAN
+	  printf("%d.\n\n", sys.pc);
 	  pauseProgram();
 	  return;
 
@@ -869,7 +926,12 @@ void run() {
 	  break;
 
 	case 255:	//End of the program
-	  printf(BOLDRED "\n\nReached the "BOLDCYAN"end "BOLDRED"of the program.\n\n");
+	  BOLDRED
+	  printf("\n\nReached the ");
+	  BOLDCYAN
+	  printf("end ");
+	  BOLDRED
+	  printf("of the program.\n\n");
 	  pauseProgram();
 	  return;
 
@@ -913,11 +975,15 @@ byte verifyStack() {
 	  return true;
 	 
 	case 1:
-	  printf(BOLDRED"\n\nError! Stack Overflow!\n\n"RESET);
+	  BOLDRED
+	  printf("\n\nError! Stack Overflow!\n\n");
+	  WHITE
 	  return false;
 
 	case 2:
-	  printf(BOLDRED"\n\nError! Stack Underflow!\n\n"RESET);
+	  BOLDRED
+	  printf("\n\nError! Stack Underflow!\n\n");
+	  WHITE
 	  return false;
 
   	case 3:
@@ -956,7 +1022,7 @@ void printChar(short int input) {
   } else if (input == -1) {
 	printf("\n");	//Enter
   } else if (input == -999) {
-	system("clear");	//Clear terminal
+	system("cls");	//Clear terminal
   } else {
 	printf("☹");	//Sad face
   }
@@ -975,14 +1041,19 @@ void printChar(short int input) {
 short int getNumber() {
 
   //Step 1: ask user to input number
-  printf(BOLDGREEN"\nPlease enter a number: (-999 to 999)\n");
+  BOLDGREEN
+  printf("\nPlease enter a number: (-999 to 999)\n");
 
 inputLoop:
-  printf(BOLDMAGENTA"-> "RESET);
+  BOLDMAGENTA
+  printf("-> ");
+  BOLDWHITE
   char* input = getUserInput();
  
   if (validate(input) == false) {
-	printf(BOLDRED"\nError! Invalid Number!\n\n");
+	BOLDRED
+	printf("\nError! Invalid Number!\n\n");
+	RESET
 	goto inputLoop;
   }
 
