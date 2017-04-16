@@ -27,16 +27,19 @@ One common feature of modern programming languages is the concept of subroutines
 <br />
 
 #### Status Flags
-In addition to registers and memory, Insanity has two status flags that are used during execution. These flags are the Overflow Flag and the Compare Flag. 
-The Overflow Flag is set to true when the result of an addition or subtraction operation results in a value greater than 999 or less than -999. If the operation is successful, then the Overflow Flag is set to false.
-The Compare Flag is set to true when the result of a compare operation is true, or false when the result of a compare operation is false.
+In addition to registers and memory, Insanity has two status flags that are used during execution. These flags are the Overflow Flag and the Compare Flag.
+
+  * The Overflow Flag is set to true when the result of an addition or subtraction operation results in a value greater than 999 or less than -999. If the operation is successful, then the Overflow Flag is set to false.
+
+  * The Compare Flag is set to true when the result of a compare operation is true, or false when the result of a compare operation is false.
 <br />
 <br />
 
 #### Cursors
 Finally, the Insanity programming language has two cursors used during execution. These cursors are called the Memory Cursor and the Digit Cursor. The cursors do not loop around.
-The Memory Cursor represents the currently “selected” memory slot. This is the memory slot that will be written to and read from using the Accumulator.
-The Digit Cursor represents the current digits spot. This cursor can be in one of three states: 1’s, 10’s, or 100’s. When performing addition or subtraction operations, the computer will add the respective value. (I.E. if the Digit Cursor is in the 10’s position, the computer will add and subtract the number 10) The digit cursor also indicates how many memory slots to move the memory cursor with the < and > commands.
+  * The Memory Cursor represents the currently “selected” memory slot. This is the memory slot that will be written to and read from using the Accumulator.
+  
+  * The Digit Cursor represents the current digits spot. This cursor can be in one of three states: 1’s, 10’s, or 100’s. When performing addition or subtraction operations, the computer will add the respective value. (I.E. if the Digit Cursor is in the 10’s position, the computer will add and subtract the number 10) The digit cursor also indicates how many memory slots to move the memory cursor with the < and > commands.
 <br />
 <br />
 <br />
