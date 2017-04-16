@@ -3,27 +3,35 @@ An esoteric programming language that consists of single symbol commands.
 <br />
 <br />
 <br />
-### Abstract
+## Abstract
 ---
 Insanity is a programming language designed by Bryan McClain. Similar to assembly, Insanity uses single-symbol commands such as < + and $ to represent simple operations. All text characters that aren’t commands are ignored, unless part of a label or jump command. Whitespace (spacebar, tab, etc.) is ignored, even when inside a label. 
 <br />
 <br />
 <br />
-### System Architecture
+## System Architecture
 ---
 #### Registers
 The Insanity programming language has 2 registers, the Accumulator and the Backup. The Accumulator is used for basic mathematical operations (addition and subtraction) as well as all of the compare operations (greater than, less than, etc.). The Backup register cannot be written to or read from directly, but can be accessed via the save and swap commands ($ and ~). Registers can hold values from -999 to 999 (inclusive).
+<br />
+<br />
 
 #### Memory
 Within the Insanity programming language are 1000 memory slots that can be written to and read from using the Accumulator. Like registers, memory slots can hold values between -999 and 999 (inclusive). Memory is navigated using the memory cursor (detailed below).
+<br />
+<br />
 
 #### The Stack
 One common feature of modern programming languages is the concept of subroutines. Insanity is no exception, and contains an internal stack for storing subroutines. The Insanity stack holds the last 100 calls to a subroutine, with a stack pointer indicating the current position in the stack. However, the values in the stack cannot be directly accessed within an Insanity program, and are handled by the implementation of Insanity. (The Insanity program itself only controls when subroutine or a return from subroutine is called). Errors should be thrown for stack overflow or underflow.
+<br />
+<br />
 
 #### Status Flags
 In addition to registers and memory, Insanity has two status flags that are used during execution. These flags are the Overflow Flag and the Compare Flag. 
 The Overflow Flag is set to true when the result of an addition or subtraction operation results in a value greater than 999 or less than -999. If the operation is successful, then the Overflow Flag is set to false.
 The Compare Flag is set to true when the result of a compare operation is true, or false when the result of a compare operation is false.
+<br />
+<br />
 
 #### Cursors
 Finally, the Insanity programming language has two cursors used during execution. These cursors are called the Memory Cursor and the Digit Cursor. The cursors do not loop around.
@@ -32,7 +40,7 @@ The Digit Cursor represents the current digits spot. This cursor can be in one o
 <br />
 <br />
 <br />
-### Commands
+## Commands
 ---
 #### Labels
 Labels represent points in the code that the computer can jump to. Labels are identified by their unique name, consisting of letters and numbers. All other characters, including whitespace and commands, are ignored inside a label. <Label> represents this unique identifier.
@@ -41,6 +49,7 @@ Labels represent points in the code that the computer can jump to. Labels are id
 | ------- | ----------- |
 | :\<Label\>: | Defines a label named \<Label\> |
 | (\<Label\>) | Jumps to the label named \<Label\> |
+<br />
 
 #### Subroutines
 Subroutines are useful when you want to reuse sections of code by calling the code from different locations in the program. Insanity allows for a maximum of 100 nested Subroutine calls. Subroutine calls are handled by the Insanity implementation, and not by the program itself.
@@ -49,6 +58,7 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 | ------- | ----------- |
 | [\<Label\>] | Jumps to the Subroutine, storing the current location of the program in the Subroutine Flag |
 | ; | Return from the Subroutine by jumping to the location in the program indicated by the Subroutine Flag |
+<br />
 
 #### Cursors
 
@@ -59,6 +69,7 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 | \"" | Increase the Digit Cursor by 1 digit (Multiply by 10) |
 | \'' | Decrease the Digit Cursor by 1 digit (Divide by 10) |
 | \_ | Reset the value of the Memory Cursor and Digit Cursor |
+<br />
 
 #### Memory and Register Access
 
@@ -68,6 +79,7 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 | \| | Swap the values of the Accumulator and the selected memory slot |
 | $ | Save the value of the Accumulator to the Backup register |
 | ~ | Swap the value of the Accumulator and Backup registers |
+<br />
 
 #### Arithmetic
 
@@ -79,7 +91,7 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 | ` | Negate the Accumulator (Multiply by -1) |
 | @ | Reset the value of the Accumulator to 0 |
 | % | Set the Accumulator to a random number from -999 to 999 |
-
+<br />
 
 #### Compare
 
@@ -91,6 +103,7 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 | \ | Set the Compare Flag to true if the Accumulator is less than 0 |
 | ! | Set the Compare Flag to true if the Overflow is true |
 | {\<Code\>} | Execute the \<Code\> within the brackets if the Compare Flag is equal to true |
+<br />
 
 #### Input and Output
 
@@ -99,6 +112,7 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 | ? | Ask the user to input a number (-999 to 999). Store this number in the Accumulator |
 | # | Output the value of the Accumulator as a text character
 (See Character Conversion Chart) |
+<br />
 
 #### Other
 
@@ -106,9 +120,10 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 | ------- | ----------- |
 | , | Pause the program (Used for debugging code) |
 | . | End the program |
+<br />
+<br />
 
-
-### Character Conversion Chart
+## Character Conversion Chart
 ---
 The Insanity programming language uses a custom Character Conversion Chart (similar to the ASCII table) for outputting characters. The character with its associated number are displayed in the following table:
 
