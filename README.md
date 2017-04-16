@@ -9,6 +9,17 @@ Insanity is a programming language designed by Bryan McClain. Similar to assembl
 <br />
 <br />
 <br />
+## How to Compile for Linux
+---
+Compile with the GCC compiler: gcc Insanity_Linux.c -o Insanity_Linux.exe
+
+_Note: requires terminos.h_
+<br />
+<br />
+<br />
+## How to Run
+---
+
 ## System Architecture
 ---
 #### Registers
