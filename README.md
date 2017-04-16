@@ -19,7 +19,10 @@ _Note: requires terminos.h_
 <br />
 ## How to Run
 ---
-
+Run Insanity_Linux.exe from command line. Insanity programs should be stored in text documents, and passed as parameters into the program. Insanity can run any number of programs, one after another.
+<br />
+<br />
+<br />
 ## System Architecture
 ---
 #### Registers
