@@ -9,6 +9,21 @@ Insanity is a programming language designed by Bryan McClain. Similar to assembl
 <br />
 <br />
 <br />
+## How to Compile for Windows
+---
+1. Install [MinGW](http://www.mingw.org/) for Windows, which includes the GCC compiler and other necessary components.
+2. Compile with the command: gcc Insanity_Windows.c -o Insanity_Windows.exe
+
+_Note: requires conio.h and windows.h_
+<br />
+<br />
+<br />
+## How to Run
+---
+Run Insanity_Windows.exe from command line. Insanity programs should be stored in text documents, and passed as parameters into the program. Insanity can run any number of programs, one after another.
+<br />
+<br />
+<br />
 ## System Architecture
 ---
 #### Registers
