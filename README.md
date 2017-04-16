@@ -69,8 +69,8 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 | ------- | ----------- |
 | > | Move the Memory Cursor 1 slot right based on the value of the memory cursor |
 | < | Move the Memory Cursor 1 slot left based on the value of the digit cursor |
-| \"" | Increase the Digit Cursor by 1 digit (Multiply by 10) |
-| \'' | Decrease the Digit Cursor by 1 digit (Divide by 10) |
+| \" | Increase the Digit Cursor by 1 digit (Multiply by 10) |
+| \' | Decrease the Digit Cursor by 1 digit (Divide by 10) |
 | \_ | Reset the value of the Memory Cursor and Digit Cursor |
 <br />
 
