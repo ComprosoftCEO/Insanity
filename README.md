@@ -8,6 +8,7 @@ An esoteric programming language that consists of single symbol commands.
 Insanity is a programming language designed by Bryan McClain. Similar to assembly, Insanity uses single-symbol commands such as < + and $ to represent simple operations. All text characters that aren’t commands are ignored, unless part of a label or jump command. Whitespace (spacebar, tab, etc.) is ignored, even when inside a label. 
 <br />
 <br />
+<br />
 ### System Architecture
 ---
 #### Registers
@@ -30,7 +31,21 @@ The Memory Cursor represents the currently “selected” memory slot. This is t
 The Digit Cursor represents the current digits spot. This cursor can be in one of three states: 1’s, 10’s, or 100’s. When performing addition or subtraction operations, the computer will add the respective value. (I.E. if the Digit Cursor is in the 10’s position, the computer will add and subtract the number 10) The digit cursor also indicates how many memory slots to move the memory cursor with the < and > commands.
 <br />
 <br />
+<br />
 ### Commands
 ---
+#### Labels
+Labels represent points in the code that the computer can jump to. Labels are identified by their unique name, consisting of letters and numbers. All other characters, including whitespace and commands, are ignored inside a label. <Label> represents this unique identifier.
 
+| Command | Description |
+| ------- | ----------- |
+| :\<Label\>: | Defines a label named \<Label\> |
+| (\<Label\>) | Jumps to the label named \<Label\> |
 
+#### Subroutines
+Subroutines are useful when you want to reuse sections of code by calling the code from different locations in the program. Insanity allows for a maximum of 100 nested Subroutine calls. Subroutine calls are handled by the Insanity implementation, and not by the program itself.
+
+| Command | Description |
+| ------- | ----------- |
+| [<Label>] | Jumps to the Subroutine, storing the current location of the program in the Subroutine Flag |
+| ; | Return from the Subroutine by jumping to the location in the program indicated by the Subroutine Flag |
