@@ -194,7 +194,7 @@ int main(int argc, char* argv[]) {
  printf("|___|_| |_|___/\\__,_|_| |_|_|\\__|\\__, |\n");
  printf("       Programming Language      |___/\n"RESET);
  printf(YELLOW "\n     Created by Bryan McClain\n");
- printf(GREEN "           Comprosoft 2017\n\n");
+ printf(GREEN "       (C) Comprosoft 2017\n\n");
 
   //Read all files
   for (int i = 1; i < argc; i++) {
