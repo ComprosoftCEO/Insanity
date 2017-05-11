@@ -615,7 +615,7 @@ byte charToCommand(char input) {
 char* readLabel(FILE* fp, char terminator) {
 
   //Create a buffer
-  char* buffer = calloc(0, sizeof(char));
+  char* buffer = calloc(10, sizeof(char));
   uint32 buf_pos = 0;		//Where to put the character in the buffer
   uint32 buf_length = 10;	//What is the size of the buffer
 
