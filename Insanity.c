@@ -3,8 +3,9 @@
 #include <string.h>
 #include <ctype.h> 
 #include <unistd.h>
-#include <termios.h>
 #include <time.h>
+
+//Platform independent version of Insanity!
 
 
 //          $$$$$$$$$$$$$$$
@@ -19,24 +20,7 @@ typedef unsigned int uint;
 #define false 0
 #define true 1
 
-//Pretty colors
-#define RESET   "\033[0m"
-#define BLACK   "\033[30m"      /* Black */
-#define RED     "\033[31m"      /* Red */
-#define GREEN   "\033[32m"      /* Green */
-#define YELLOW  "\033[33m"      /* Yellow */
-#define BLUE    "\033[34m"      /* Blue */
-#define MAGENTA "\033[35m"      /* Magenta */
-#define CYAN    "\033[36m"      /* Cyan */
-#define WHITE   "\033[37m"      /* White */
-#define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
-#define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
-#define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
-#define BOLDYELLOW  "\033[1m\033[33m"      /* Bold Yellow */
-#define BOLDBLUE    "\033[1m\033[34m"      /* Bold Blue */
-#define BOLDMAGENTA "\033[1m\033[35m"      /* Bold Magenta */
-#define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
-#define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
+
 
 
 //          $$$$$$$$$$$$$$$$
@@ -186,15 +170,15 @@ short int parseNumber(char*);
 
 int main(int argc, char* argv[]) {
 
-
- printf(BOLDMAGENTA " ___                       _ _\n");
+ printf("\n");
+ printf(" ___                       _ _\n");
  printf("|_ _|_ __  ___  __ _ _ __ (_) |_ _   _\n");
  printf(" | || '_ \\/ __|/ _` | '_ \\| | __| | | |\n");
  printf(" | || | | \\__ \\ (_| | | | | | |_| |_| |\n");
  printf("|___|_| |_|___/\\__,_|_| |_|_|\\__|\\__, |\n");
- printf("       Programming Language      |___/\n"RESET);
- printf(YELLOW "\n     Created by Bryan McClain\n");
- printf(GREEN "       (C) Comprosoft 2017\n\n");
+ printf("       Programming Language      |___/\n");
+ printf("\n     Created by Bryan McClain\n");
+ printf("       (C) Comprosoft 2017\n\n");
 
   //Read all files
   for (int i = 1; i < argc; i++) {
@@ -202,7 +186,7 @@ int main(int argc, char* argv[]) {
 	//Make sure file is lefit
 	if( access(argv[i], F_OK ) != -1 ) {
    	  
-  	  printf(WHITE "\nProgram: %s\n\n", argv[i]);
+  	  printf("\nProgram: %s\n\n", argv[i]);
 
 	  //Open the file
 	  FILE *fp = fopen(argv[i], "rb");
@@ -219,12 +203,10 @@ int main(int argc, char* argv[]) {
 	  fclose(fp);
 
 	} else {
-    	  printf(BOLDCYAN "Error!"RESET" Invalid file %s\n\n", argv[i]);
+    	  printf("Error! Invalid file %s\n\n", argv[i]);
 	}
 
   }
-
-  printf(RESET);
 
   return 0;
 
@@ -272,25 +254,25 @@ void reset() {
 void drawDebug(label* allLabels, byte* program) {
 
   //Display labels found
-  printf(YELLOW"Labels Found: %d\n",lblCount);
+  printf("Labels Found: %d\n",lblCount);
   for (int i = 0; i < lblCount; i++) {
-	printf(BLUE"  \"%s\" "RESET,allLabels[i].name);
-  	if (allLabels[i].used == false) {printf(BOLDMAGENTA"\t(Unused)");}
-	printf(RESET"\n");
+	printf("  \"%s\" ",allLabels[i].name);
+  	if (allLabels[i].used == false) {printf("\t(Unused)");}
+	printf("\n");
   }
 
   //Grammer OCD
   if (curByte == 1) {
-      printf(BOLDCYAN"\nProgram: 1 Byte\n  "BOLDGREEN);
+      printf("\nProgram: 1 Byte\n  ");
   } else {
-      printf(BOLDCYAN"\nProgram: %d Bytes\n  "BOLDGREEN,curByte);
+      printf("\nProgram: %d Bytes\n  ",curByte);
   }
 
   for(int i = 0; i < curByte; i++) {
 	printf("%d",sys.program[i]);
   	if (i < curByte-1) {printf(",");}
   }
-  printf(BOLDWHITE"\n\n\n"RESET);
+  printf("\n\n\n");
 
 
 }
@@ -301,16 +283,10 @@ void drawDebug(label* allLabels, byte* program) {
 //#################################
 void pauseProgram() {
 
-  printf(BOLDWHITE"Press any key to continue..."RESET);
+  printf("Press any key to continue...");
 
-  struct termios info;
-  tcgetattr(0, &info);          /* get current terminal attirbutes; 0 is the file descriptor for stdin */
-  info.c_lflag &= ~ICANON;      /* disable canonical mode */
-  info.c_cc[VMIN] = 1;          /* wait until at least one keystroke available */
-  info.c_cc[VTIME] = 0;         /* no timeout */
-  tcsetattr(0, TCSANOW, &info); /* set immediately */
+  getchar();	
 
-  getchar();
   printf("\n");
 }
 
@@ -323,26 +299,20 @@ void pauseProgram() {
 //#################################
 void debugPause() {
 
-  printf(BOLDWHITE"\nDebug Info:\n");
+  printf("\nDebug Info:\n");
   printf("-----------\n\n");
-  printf(BOLDCYAN"Acc: "RESET"%d    \t|",sys.acc);
-  printf(BOLDYELLOW"   Bak: "RESET"%d\n",sys.bak);
-  printf(BOLDGREEN"PC: "RESET"%d    \t|", sys.pc);
-  printf(BOLDMAGENTA"   SP: "RESET"%d\n\n",sys.sp);
-  printf(BOLDBLUE"Memory: "RESET"%d\t|",sys.mc);
-  printf(BOLDBLUE"   Digit: "RESET"%d\n",getDigit());
-  printf(BOLDRED"Overflow: "RESET"%d\t|",sys.overflow);
-  printf(BOLDRED"   Compare: "RESET"%d\n",sys.compare);
+  printf("Acc: %d    \t|",sys.acc);
+  printf("   Bak: %d\n",sys.bak);
+  printf("PC: %d    \t|", sys.pc);
+  printf("   SP: %d\n\n",sys.sp);
+  printf("Memory: %d\t|",sys.mc);
+  printf("   Digit: %d\n",getDigit());
+  printf("Overflow: %d\t|",sys.overflow);
+  printf("   Compare: %d\n",sys.compare);
   printf("\nPress any key to continue...");
 
-  struct termios info;
-  tcgetattr(0, &info);          /* get current terminal attirbutes; 0 is the file descriptor for stdin */
-  info.c_lflag &= ~ICANON;      /* disable canonical mode */
-  info.c_cc[VMIN] = 1;          /* wait until at least one keystroke available */
-  info.c_cc[VTIME] = 0;         /* no timeout */
-  tcsetattr(0, TCSANOW, &info); /* set immediately */
+  getchar();	
 
-  getchar();
   printf("\n");
 }
 
@@ -433,7 +403,7 @@ byte parseFile(FILE *fp) {
 	  //Verify that this label doesn't already exist
 	  newName = readLabel(fp,':'); 
 	  if (duplicateLabel(newName, allLabels) == true) {
-		printf(BOLDCYAN "Error!"RESET" Duplicate label \"%s\"\n", newName);
+		printf("Error! Duplicate label \"%s\"\n", newName);
 		error = true;
 		break;
 	  }
@@ -490,7 +460,7 @@ byte parseFile(FILE *fp) {
 		lastIf = temp;
 		ifCount--;
 	  } else {
-		printf(BOLDCYAN "Erorr! "RESET"Missing starting bracket {.\n");
+		printf("Erorr! Missing starting bracket {.\n");
 		error = true;
  	  }
 	  break;
@@ -512,7 +482,7 @@ byte parseFile(FILE *fp) {
 
   //Test for missing if end
   if (ifCount > 0) {
-	printf(BOLDCYAN "Error! "RESET"Missing ending bracket }.\n");
+	printf("Error! Missing ending bracket }.\n");
 	error = true;
   }
   
@@ -525,7 +495,7 @@ byte parseFile(FILE *fp) {
 	uint32 addr = findLabel(toResolve[i].name, allLabels);
 
 	if (addr == -1) {
-		printf(BOLDCYAN "Error! "RESET"Undefined label \"%s\"\n",toResolve[i].name);
+		printf("Error! Undefined label \"%s\"\n",toResolve[i].name);
 		error = true;	
 	} else {
 	 	storeWord(&sys.program[toResolve[i].address],addr);
@@ -556,7 +526,7 @@ byte parseFile(FILE *fp) {
 //#    This is VERY BAD!!!
 //###############################
 void parseFail() {
-  printf(BOLDRED "\nUnable to compile program.\n"YELLOW"  *Don't go insane fixing your code :)\n\n" RESET);
+  printf("\nUnable to compile program.\n  *Don't go insane fixing your code :)\n\n");
 }
 
 
@@ -720,7 +690,7 @@ void run() {
     //printf("%d\n",c);
     switch (c) {
 	case 0:		//Quit
-	  printf(BOLDRED"\n\nProgram stopped at "BOLDCYAN"%d.\n\n", sys.pc);
+	  printf("\n\nProgram stopped at %d.\n\n", sys.pc);
 	  pauseProgram();
 	  return;
 
@@ -869,7 +839,7 @@ void run() {
 	  break;
 
 	case 255:	//End of the program
-	  printf(BOLDRED "\n\nReached the "BOLDCYAN"end "BOLDRED"of the program.\n\n");
+	  printf("\n\nReached the end of the program.\n\n");
 	  pauseProgram();
 	  return;
 
@@ -913,11 +883,11 @@ byte verifyStack() {
 	  return true;
 	 
 	case 1:
-	  printf(BOLDRED"\n\nError! Stack Overflow!\n\n"RESET);
+	  printf("\n\nError! Stack Overflow!\n\n");
 	  return false;
 
 	case 2:
-	  printf(BOLDRED"\n\nError! Stack Underflow!\n\n"RESET);
+	  printf("\n\nError! Stack Underflow!\n\n");
 	  return false;
 
   	case 3:
@@ -975,14 +945,14 @@ void printChar(short int input) {
 short int getNumber() {
 
   //Step 1: ask user to input number
-  printf(BOLDGREEN"\nPlease enter a number: (-999 to 999)\n");
+  printf("\nPlease enter a number: (-999 to 999)\n");
 
 inputLoop:
-  printf(BOLDMAGENTA"-> "RESET);
+  printf("-> ");
   char* input = getUserInput();
  
   if (validate(input) == false) {
-	printf(BOLDRED"\nError! Invalid Number!\n\n");
+	printf("\nError! Invalid Number!\n\n");
 	goto inputLoop;
   }
 
