@@ -4,13 +4,11 @@ An esoteric programming language that consists of single symbol commands.
 <br />
 <br />
 ## Abstract
----
 Insanity is a programming language designed by Bryan McClain. Similar to assembly, Insanity uses single-symbol commands such as < + and $ to represent simple operations. All text characters that aren’t commands are ignored, unless part of a label or jump command. Whitespace (spacebar, tab, etc.) is ignored, even when inside a label. 
 <br />
 <br />
 <br />
 ## How to Compile for Windows
----
 1. Install [MinGW](http://www.mingw.org/) for Windows, which includes the GCC compiler and other necessary components.
 2. Compile with the command: gcc Insanity_Windows.c -o Insanity_Windows.exe
 
@@ -19,13 +17,11 @@ _Note: requires conio.h and windows.h_
 <br />
 <br />
 ## How to Run
----
 Run Insanity_Windows.exe from command line. Insanity programs should be stored in text documents, and passed as parameters into the program. Insanity can run any number of programs, one after another.
 <br />
 <br />
 <br />
 ## System Architecture
----
 #### Registers
 The Insanity programming language has 2 registers, the Accumulator and the Backup. The Accumulator is used for basic mathematical operations (addition and subtraction) as well as all of the compare operations (greater than, less than, etc.). The Backup register cannot be written to or read from directly, but can be accessed via the save and swap commands ($ and ~). Registers can hold values from -999 to 999 (inclusive).
 <br />
@@ -59,7 +55,6 @@ Finally, the Insanity programming language has two cursors used during execution
 <br />
 
 ## Commands
----
 #### Labels
 Labels represent points in the code that the computer can jump to. Labels are identified by their unique name, consisting of letters and numbers. All other characters, including whitespace and commands, are ignored inside a label. <Label> represents this unique identifier.
 
@@ -141,30 +136,29 @@ Subroutines are useful when you want to reuse sections of code by calling the co
 <br />
 
 ## Character Conversion Chart
----
 The Insanity programming language uses a custom Character Conversion Chart (similar to the ASCII table) for outputting characters. The character with its associated number are displayed in the following table:
 
 | Number | Letter |   | Number | Letter |   | Number | Letter |   | Number | Letter |   | Number | Letter |
 | ------ | ------ | - | ------ | ------ | - | ------ | ------ | - | ------ | ------ | - | ------ | ------ |
-| 0 | (Space) | | 20 | 4 | | 40 | H | | 60 | \ | | 80 | P |
-| 1 | ! | | 21 | 5 | | 41 | I | | 61 | ] | | 81 | Q |
-| 2 | " | | 22 | 6 | | 42 | J | | 62 | ^ | | 82 | R |
-| 3 | # | | 23 | 7 | | 43 | K | | 63 | _ | | 83 | S |
-| 4 | $ | | 24 | 8 | | 44 | L | | 64 | ` | | 84 | T |
-| 5 | % | | 25 | 9 | | 45 | M | | 65 | A | | 85 | U |
-| 6 | \& | | 26 | : | | 46 | N | | 66 | B | | 86 | V |
-| 7 | ' | | 27 | ; | | 47 | O | | 67 | C | | 87 | W |
-| 8 | ( | | 28 | < | | 48 | P | | 68 | D | | 88 | X |
-| 9 | ) | | 29 | = | | 49 | Q | | 69 | E | | 89 | Y |
-| 10 | * | | 30 | > | | 50 | R | | 70 | F | | 90 | Z |
-| 11 | + | | 31 | ? | | 51 | S | | 71 | G | | 91 | { |
-| 12 | , | | 32 | @ | | 52 | T | | 72 | H | | 92 | | |
-| 13 | - | | 33 | A | | 53 | U | | 73 | I | | 93 | } |
-| 14 | . | | 34 | B | | 54 | V | | 74 | J | | 94 | ~ |
-| 15 | / | | 35 | C | | 55 | W | | 75 | K | | >94 | ☺ |
-| 16 | 0 | | 36 | D | | 56 | X | | 76 | L | | -1 | (Enter) |
-| 17 | 1 | | 37 | E | | 57 | Y | | 77 | M | | <-1 | ☹ |
-| 18 | 2 | | 38 | F | | 58 | Z | | 78 | N | | -999 | (Clear) |
-| 19 | 3 | | 39 | G | | 59 | [ | | 79 | O | | | |
+| 0 | (Space) | | 20 | 4 | | 40 | H | | 60 | \ | | 80 | p |
+| 1 | ! | | 21 | 5 | | 41 | I | | 61 | ] | | 81 | q |
+| 2 | " | | 22 | 6 | | 42 | J | | 62 | ^ | | 82 | r |
+| 3 | # | | 23 | 7 | | 43 | K | | 63 | _ | | 83 | s |
+| 4 | $ | | 24 | 8 | | 44 | L | | 64 | ` | | 84 | t|
+| 5 | % | | 25 | 9 | | 45 | M | | 65 | a | | 85 | u |
+| 6 | \& | | 26 | : | | 46 | N | | 66 | b | | 86 | v |
+| 7 | ' | | 27 | ; | | 47 | O | | 67 | c | | 87 | w |
+| 8 | ( | | 28 | < | | 48 | P | | 68 | d | | 88 | x |
+| 9 | ) | | 29 | = | | 49 | Q | | 69 | e | | 89 | y |
+| 10 | * | | 30 | > | | 50 | R | | 70 | f | | 90 | z |
+| 11 | + | | 31 | ? | | 51 | S | | 71 | g | | 91 | { |
+| 12 | , | | 32 | @ | | 52 | T | | 72 | h | | 92 | \| |
+| 13 | - | | 33 | A | | 53 | U | | 73 | i | | 93 | } |
+| 14 | . | | 34 | B | | 54 | V | | 74 | j | | 94 | ~ |
+| 15 | / | | 35 | C | | 55 | W | | 75 | k | | >94 | ☺ |
+| 16 | 0 | | 36 | D | | 56 | X | | 76 | l | | -1 | (Enter) |
+| 17 | 1 | | 37 | E | | 57 | Y | | 77 | m | | <-1 | ☹ |
+| 18 | 2 | | 38 | F | | 58 | Z | | 78 | n | | -999 | (Clear) |
+| 19 | 3 | | 39 | G | | 59 | [ | | 79 | o | | | |
 
 Note that numbers greater than 94 output a smiley face (☺) and numbers less than -1 output a sad face (☹). The number -1 starts a new line of text characters, and 0 is the space character. The number -999 clears all text.
