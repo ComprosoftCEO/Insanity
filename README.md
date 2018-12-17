@@ -8,6 +8,18 @@ Insanity is a programming language designed by Bryan McClain. Similar to assembl
 <br />
 <br />
 <br />
+## How to Compile for Linux
+Compile with the GCC compiler: gcc Insanity_Linux.c -o Insanity_Linux.exe
+
+_Note: requires terminos.h_
+<br />
+<br />
+<br />
+## How to Run
+Run Insanity_Linux.exe from command line. Insanity programs should be stored in text documents, and passed as parameters into the program. Insanity can run any number of programs, one after another.
+<br />
+<br />
+<br />
 ## System Architecture
 #### Registers
 The Insanity programming language has 2 registers, the Accumulator and the Backup. The Accumulator is used for basic mathematical operations (addition and subtraction) as well as all of the compare operations (greater than, less than, etc.). The Backup register cannot be written to or read from directly, but can be accessed via the save and swap commands ($ and ~). Registers can hold values from -999 to 999 (inclusive).
